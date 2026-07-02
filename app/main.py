@@ -13,7 +13,8 @@ Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Etapa e9 - Roles y permisos",
-    version="0.1.0"
+    version="0.1.0",
+    root_path=os.getenv("ROOT_PATH", "")
 )
 
 app.add_middleware(

@@ -16,7 +16,7 @@ alembic upgrade head
 echo ""
 echo "Ejecutando Seed..."
 
-python3 -m app.seeds.seed
+python3 -m app.seeds.init_db
 
 echo ""
 echo "Migraciones finalizadas."

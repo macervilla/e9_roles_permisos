@@ -31,7 +31,7 @@ services:
       - mysql
 
     env_file:
-      - .env
+      - .env.production
 
     command: sh docker/migrate.sh
 
@@ -48,7 +48,7 @@ services:
       - migration
 
     env_file:
-      - .env
+      - .env.production
     environment:
       - ROOT_PATH=/e9
     ports:

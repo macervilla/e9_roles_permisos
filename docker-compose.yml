@@ -1,59 +1,59 @@
-version: "3.9"
-
 services:
 
   mysql:
-
     image: mysql:8.4
-
     container_name: mysql-e9
-
     restart: always
 
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: dbe8
-  
-  
+
     ports:
       - "3307:3306"
 
     volumes:
       - mysql_data:/var/lib/mysql
 
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-proot"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
   migration:
-
     build: .
-
     container_name: migration-e9
 
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
     env_file:
       - .env.production
 
     command: sh docker/migrate.sh
 
+    restart: "no"
+
   backend:
-
     build: .
-
     container_name: fastapi-e9
 
-    restart: always
-
     depends_on:
-      - mysql
-      - migration
+      migration:
+        condition: service_completed_successfully
 
     env_file:
       - .env.production
+
     environment:
-      - ROOT_PATH=/e9
+      ROOT_PATH: /e9
+
+    restart: always
+
     ports:
       - "8000:8000"
 
 volumes:
-
   mysql_data:

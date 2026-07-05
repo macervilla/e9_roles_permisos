@@ -58,6 +58,10 @@ services:
   frontend:
     build:
       context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        FRONTEND_BASE: /e9/
+        VITE_API_URL: /e9/api
 
     container_name: frontend-e9
 

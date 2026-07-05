@@ -6,7 +6,7 @@ import TablaDocentes from "../components/TablaDocentes";
 
 function Docentes() {
   const [mostrarInactivos, setMostrarInactivos] = useState(false);
-  
+
   const [docentes, setDocentes] = useState([]);
   const [cargos, setCargos] = useState([]);
 
@@ -24,19 +24,34 @@ function Docentes() {
 
   const cargarDocentes = async () => {
     try {
-        const url = mostrarInactivos ? "/docentes/inactivos" : "/docentes/";
-        const respuesta = await api.get(url);
-        setDocentes(respuesta.data);
+      const url = mostrarInactivos ? "/docentes/inactivos" : "/docentes/";
+
+      console.log("URL DOCENTES:", url);
+
+      const respuesta = await api.get(url);
+
+      console.log("RESPUESTA DOCENTES:", respuesta);
+      console.log("DATA DOCENTES:", respuesta.data);
+
+      setDocentes(respuesta.data);
     } catch (error) {
-        console.error(error);
+      console.error("ERROR CARGANDO DOCENTES:", error);
     }
   };
 
   const cargarCargos = async () => {
-    const respuesta = await api.get("/cargos/");
-    setCargos(respuesta.data);
+    try {
+      const respuesta = await api.get("/cargos/");
+    /*  console.log("DATA CARGOS:", respuesta.data);*/
+      setCargos(respuesta.data);
+    } catch (error) {
+      /*  console.error("ERROR CARGANDO CARGOS:", error); */
+    }
   };
 
+ /* console.log("DOCENTES EN RENDER:", docentes);
+  console.log("CARGOS EN RENDER:", cargos);
+*/
   const nuevoDocente = () => {
     setDocenteEditandoId(null);
     setNombre("");
@@ -79,25 +94,22 @@ function Docentes() {
   };
 
   return (
-         <div className="card">
+    <div className="card">
       <h1>Listado de docentes</h1>
+
       <div className="barra-acciones">
-       
         <button
           className={mostrarInactivos ? "btn-inactivos" : "btn-activos"}
-            onClick={() => setMostrarInactivos(!mostrarInactivos)}
-            style={{ width: "150px" }}
+          onClick={() => setMostrarInactivos(!mostrarInactivos)}
+          style={{ width: "150px" }}
         >
-            {mostrarInactivos ? "Ver activos" : "Ver inactivos"}
+          {mostrarInactivos ? "Ver activos" : "Ver inactivos"}
         </button>
 
-        <button
-            className="btn-nuevo"
-            onClick={nuevoDocente}
-            >
-            Nuevo Docente
+        <button className="btn-nuevo" onClick={nuevoDocente}>
+          Nuevo Docente
         </button>
-        </div>
+      </div>
 
       <FormularioDocente
         visible={mostrarFormulario}

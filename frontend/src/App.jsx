@@ -11,7 +11,7 @@ import RutaProtegida from "./components/RutaProtegida.jsx";
 
 function App() {
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "")}>
 <Routes>
   <Route path="/login" element={<Login />} />
 

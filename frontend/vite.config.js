@@ -4,13 +4,17 @@ import react from "@vitejs/plugin-react";
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, "../", "");
 
+  const frontendBase =
+    process.env.FRONTEND_BASE || env.FRONTEND_BASE || "/";
+
+  const apiUrl =
+    process.env.VITE_API_URL || env.VITE_API_URL || "http://localhost:8000";
+
   return {
-    base: env.FRONTEND_BASE || "/",
+    base: frontendBase,
     plugins: [react()],
     define: {
-      "import.meta.env.VITE_API_URL": JSON.stringify(
-        env.VITE_API_URL || "http://localhost:8000"
-      ),
+      "import.meta.env.VITE_API_URL": JSON.stringify(apiUrl),
     },
   };
 });

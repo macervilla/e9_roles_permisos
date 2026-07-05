@@ -77,15 +77,15 @@ class UsuarioRepository:
         self.db.refresh(usuario)
 
         return usuario
-def cambiar_clave(self, usuario_id: int, clave_hash: str):
-    usuario = self.obtener_por_id(usuario_id)
+    def blanquear_clave(self, usuario_id: int, clave_hash: str):
+        usuario = self.obtener_por_id(usuario_id)
 
-    if not usuario:
-        return None
+        if not usuario:
+            return None
 
-    usuario.clave = clave_hash
+        usuario.clave = clave_hash
 
-    self.db.commit()
-    self.db.refresh(usuario)
+        self.db.commit()
+        self.db.refresh(usuario)
 
-    return usuario
+        return usuario

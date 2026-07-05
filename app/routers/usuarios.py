@@ -64,6 +64,13 @@ def cambiar_clave(
 ):
     return service.cambiar_clave(usuario_id, datos.clave)
 
+@router.put("/{usuario_id}/blanquear-clave", response_model=UsuarioResponse)
+def blanquear_clave(
+    usuario_id: int,
+    service: UsuarioService = Depends(get_usuario_service)
+):
+    return service.blanquear_clave(usuario_id)
+
 @router.put("/{usuario_id}/rol", response_model=UsuarioResponse)
 def cambiar_rol(
     usuario_id: int,

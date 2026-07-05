@@ -68,6 +68,22 @@ class UsuarioService:
 
         return usuario
 
+    def blanquear_clave(self, usuario_id: int):
+        usuario = self.repository.obtener_por_id(usuario_id)
+
+        if not usuario:
+            raise HTTPException(
+                status_code=404,
+                detail="Usuario no encontrado"
+            )
+
+        clave_hash = hashear_clave(usuario.usuario)
+
+        return self.repository.blanquear_clave(
+            usuario_id,
+            clave_hash
+    )
+
     def cambiar_rol(self, usuario_id: int, rol_id: int):
         if not self.repository.existe_rol(rol_id):
             raise HTTPException(
@@ -111,3 +127,4 @@ class UsuarioService:
             )
 
         return usuario
+    

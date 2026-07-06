@@ -10,6 +10,20 @@ jobs:
   pytest:
     runs-on: ubuntu-latest
 
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: dbe8_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -uroot -proot"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
@@ -27,5 +41,11 @@ jobs:
       - name: Ejecutar tests con Pytest
         env:
           PYTHONPATH: .
+          DB_HOST: 127.0.0.1
+          DB_PORT: 3306
+          DB_USER: root
+          DB_PASSWORD: root
+          DB_NAME: dbe8_test
+          SECRET_KEY: test_secret_key
         run: |
           pytest -v

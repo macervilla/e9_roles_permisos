@@ -25,7 +25,7 @@ def main():
                 usuario="admin",
                 clave=hashear_clave(os.getenv("ADMIN_CLAVE", "admin")),
                 rol_id=rol.id,
-                activo=True
+                activo=True,
             )
             db.add(usuario)
             db.commit()

@@ -11,11 +11,7 @@ class MockDocenteRepository:
 
     def obtener_por_id(self, docente_id):
         if docente_id == 1:
-            return {
-                "id": 1,
-                "nombre": "Juan",
-                "apellido": "Perez"
-            }
+            return {"id": 1, "nombre": "Juan", "apellido": "Perez"}
 
         return None
 

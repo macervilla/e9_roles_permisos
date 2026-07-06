@@ -8,6 +8,7 @@ class RolRepository:
 
     def listar(self):
         return self.db.query(RolDB).filter(RolDB.activo == True).all()
+
     def listarinactivos(self):
         return self.db.query(RolDB).filter(RolDB.activo == False).all()
 
@@ -15,10 +16,7 @@ class RolRepository:
         return self.db.query(RolDB).filter(RolDB.id == rol_id).first()
 
     def crear(self, datos):
-        rol = RolDB(
-            nombre=datos.nombre,
-            activo=True
-        )
+        rol = RolDB(nombre=datos.nombre, activo=True)
 
         self.db.add(rol)
         self.db.commit()
@@ -34,7 +32,7 @@ class RolRepository:
 
         rol.nombre = datos.nombre
         rol.activo = datos.activo
-        
+
         self.db.commit()
         self.db.refresh(rol)
 

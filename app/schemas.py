@@ -1,13 +1,14 @@
 from pydantic import BaseModel
 
-
 # ---------- Activo ----------
+
 
 class ActivoUpdate(BaseModel):
     activo: bool
 
 
 # ---------- Roles ----------
+
 
 class RolCreate(BaseModel):
     nombre: str
@@ -28,6 +29,7 @@ class RolResponse(BaseModel):
 
 
 # ---------- Cargos ----------
+
 
 class CargoCreate(BaseModel):
     nombre: str
@@ -50,6 +52,7 @@ class CargoResponse(BaseModel):
 
 # ---------- Docentes ----------
 
+
 class DocenteCreate(BaseModel):
     nombre: str
     cargo_id: int
@@ -68,11 +71,14 @@ class DocenteResponse(BaseModel):
 
 # ---------- Usuarios ----------
 
+
 class UsuarioCreate(BaseModel):
     usuario: str
     clave: str
     nombre: str
     rol_id: int
+
+
 class UsuarioUpdate(BaseModel):
     usuario: str
     nombre: str
@@ -82,6 +88,7 @@ class UsuarioUpdate(BaseModel):
 
 class UsuarioClaveUpdate(BaseModel):
     clave: str
+
 
 class UsuarioResponse(BaseModel):
     id: int

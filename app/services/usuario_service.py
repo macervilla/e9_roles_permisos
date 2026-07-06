@@ -17,10 +17,7 @@ class UsuarioService:
         usuario = self.repository.obtener_por_id(usuario_id)
 
         if not usuario:
-            raise HTTPException(
-                status_code=404,
-                detail="Usuario no encontrado"
-            )
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         return usuario
 
@@ -28,16 +25,10 @@ class UsuarioService:
         usuario_existente = self.repository.obtener_por_usuario(datos.usuario)
 
         if usuario_existente:
-            raise HTTPException(
-                status_code=400,
-                detail="El usuario ya existe"
-            )
+            raise HTTPException(status_code=400, detail="El usuario ya existe")
 
         if not self.repository.existe_rol(datos.rol_id):
-            raise HTTPException(
-                status_code=400,
-                detail="El rol no existe"
-            )
+            raise HTTPException(status_code=400, detail="El rol no existe")
 
         datos.clave = hashear_clave(datos.clave)
 
@@ -47,24 +38,15 @@ class UsuarioService:
         usuario_existente = self.repository.obtener_por_usuario(datos.usuario)
 
         if usuario_existente and usuario_existente.id != usuario_id:
-            raise HTTPException(
-                status_code=400,
-                detail="El usuario ya existe"
-            )
+            raise HTTPException(status_code=400, detail="El usuario ya existe")
 
         if not self.repository.existe_rol(datos.rol_id):
-            raise HTTPException(
-                status_code=400,
-                detail="El rol no existe"
-            )
+            raise HTTPException(status_code=400, detail="El rol no existe")
 
         usuario = self.repository.actualizar(usuario_id, datos)
 
         if not usuario:
-            raise HTTPException(
-                status_code=404,
-                detail="Usuario no encontrado"
-            )
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         return usuario
 
@@ -72,32 +54,20 @@ class UsuarioService:
         usuario = self.repository.obtener_por_id(usuario_id)
 
         if not usuario:
-            raise HTTPException(
-                status_code=404,
-                detail="Usuario no encontrado"
-            )
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         clave_hash = hashear_clave(usuario.usuario)
 
-        return self.repository.blanquear_clave(
-            usuario_id,
-            clave_hash
-    )
+        return self.repository.blanquear_clave(usuario_id, clave_hash)
 
     def cambiar_rol(self, usuario_id: int, rol_id: int):
         if not self.repository.existe_rol(rol_id):
-            raise HTTPException(
-                status_code=400,
-                detail="El rol no existe"
-            )
+            raise HTTPException(status_code=400, detail="El rol no existe")
 
         usuario = self.repository.cambiar_rol(usuario_id, rol_id)
 
         if not usuario:
-            raise HTTPException(
-                status_code=404,
-                detail="Usuario no encontrado"
-            )
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         return usuario
 
@@ -105,26 +75,16 @@ class UsuarioService:
         usuario = self.repository.cambiar_activo(usuario_id, activo)
 
         if not usuario:
-            raise HTTPException(
-                status_code=404,
-                detail="Usuario no encontrado"
-            )
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         return usuario
 
     def cambiar_clave(self, usuario_id: int, nueva_clave: str):
         clave_hash = hashear_clave(nueva_clave)
 
-        usuario = self.repository.cambiar_clave(
-            usuario_id,
-            clave_hash
-        )
+        usuario = self.repository.cambiar_clave(usuario_id, clave_hash)
 
         if not usuario:
-            raise HTTPException(
-                status_code=404,
-                detail="Usuario no encontrado"
-            )
+            raise HTTPException(status_code=404, detail="Usuario no encontrado")
 
         return usuario
-    

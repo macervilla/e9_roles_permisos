@@ -8,11 +8,10 @@ class UsuarioRepository:
 
     def listar(self):
         return self.db.query(UsuarioDB).filter(UsuarioDB.activo == True).all()
-    
+
     def listar_usuarios_inactivos(self):
         return self.db.query(UsuarioDB).filter(UsuarioDB.activo == False).all()
 
-   
     def obtener_por_id(self, usuario_id: int):
         return self.db.query(UsuarioDB).filter(UsuarioDB.id == usuario_id).first()
 
@@ -28,7 +27,7 @@ class UsuarioRepository:
             nombre=datos.nombre,
             clave=datos.clave,
             rol_id=datos.rol_id,
-            activo=True
+            activo=True,
         )
 
         self.db.add(usuario)
@@ -44,7 +43,7 @@ class UsuarioRepository:
             return None
 
         usuario.usuario = datos.usuario
-        usuario.nombre=datos.nombre
+        usuario.nombre = datos.nombre
         usuario.rol_id = datos.rol_id
 
         self.db.commit()
@@ -77,6 +76,7 @@ class UsuarioRepository:
         self.db.refresh(usuario)
 
         return usuario
+
     def blanquear_clave(self, usuario_id: int, clave_hash: str):
         usuario = self.obtener_por_id(usuario_id)
 

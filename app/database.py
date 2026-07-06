@@ -25,9 +25,7 @@ def get_database_url() -> str:
     db_password = os.getenv("DB_PASSWORD")
 
     return (
-        f"mysql+pymysql://"
-        f"{db_user}:{db_password}"
-        f"@{db_host}:{db_port}/{db_name}"
+        f"mysql+pymysql://" f"{db_user}:{db_password}" f"@{db_host}:{db_port}/{db_name}"
     )
 
 

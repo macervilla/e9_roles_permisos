@@ -15,7 +15,7 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI(
     title="Etapa e9 - Roles y permisos",
     version="0.1.0",
-    root_path=os.getenv("ROOT_PATH", "")
+    root_path=os.getenv("ROOT_PATH", ""),
 )
 
 app.add_middleware(
@@ -42,6 +42,4 @@ app.include_router(roles_router)
 
 @app.get("/")
 def inicio():
-    return {
-        "mensaje": "API funcionando"
-    }
+    return {"mensaje": "API funcionando"}

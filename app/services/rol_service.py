@@ -8,7 +8,7 @@ class RolService:
 
     def listar_roles(self):
         return self.repository.listar()
-    
+
     def listar_rolesinactivos(self):
         return self.repository.listarinactivos()
 
@@ -22,14 +22,14 @@ class RolService:
 
     def crear_rol(self, datos):
         return self.repository.crear(datos)
-    
+
     def actualizar_rol(self, rol_id: int, datos):
         rol = self.repository.actualizar(rol_id, datos)
 
         if not rol:
             raise ValueError("Rol no encontrado")
 
-        return rol  
+        return rol
 
     def eliminar_rol(self, rol_id: int):
         rol = self.repository.eliminar(rol_id)

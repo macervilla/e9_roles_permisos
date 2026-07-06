@@ -9,7 +9,7 @@ class CargoRepository:
 
     def listar(self):
         return self.db.query(CargoDB).filter(CargoDB.activo == True).all()
-    
+
     def listar_cargos_inactivos(self):
         return self.db.query(CargoDB).filter(CargoDB.activo == False).all()
 
@@ -17,10 +17,7 @@ class CargoRepository:
         return self.db.query(CargoDB).filter(CargoDB.id == cargo_id).first()
 
     def crear(self, datos):
-        cargo = CargoDB(
-            nombre=datos.nombre,
-            activo=datos.activo
-        )
+        cargo = CargoDB(nombre=datos.nombre, activo=datos.activo)
 
         self.db.add(cargo)
         self.db.commit()

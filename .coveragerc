@@ -1,0 +1,11 @@
+[run]
+omit =
+    */tests/*
+    */venv/*
+    */alembic/*
+    */seeds/*
+
+[report]
+show_missing = True
+skip_covered = True
+precision = 2

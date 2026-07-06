@@ -23,7 +23,6 @@ from app.database import Base
 from app.dependencies import get_db
 from app.main import app
 
-
 # -------------------------------------------------------------------
 # Base SQLite en memoria
 # -------------------------------------------------------------------
@@ -47,6 +46,7 @@ TestingSessionLocal = sessionmaker(
 # Base de datos para cada test
 # -------------------------------------------------------------------
 
+
 @pytest.fixture(scope="function")
 def db_session():
 
@@ -64,6 +64,7 @@ def db_session():
 # -------------------------------------------------------------------
 # Reemplaza get_db()
 # -------------------------------------------------------------------
+
 
 @pytest.fixture(scope="function")
 def client(db_session):

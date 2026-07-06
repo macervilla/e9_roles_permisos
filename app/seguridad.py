@@ -5,19 +5,13 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import jwt, JWTError
 from passlib.context import CryptContext
 
-
 SECRET_KEY = "clave_super_secreta_cambiar_en_produccion"
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-pwd_context = CryptContext(
-    schemes=["pbkdf2_sha256"],
-    deprecated="auto"
-)
+pwd_context = CryptContext(schemes=["pbkdf2_sha256"], deprecated="auto")
 
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="auth/login"
-)
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="auth/login")
 
 
 def hashear_clave(clave: str) -> str:
@@ -40,9 +34,7 @@ def crear_token(data: dict):
     return jwt.encode(datos, SECRET_KEY, algorithm=ALGORITHM)
 
 
-def obtener_usuario_actual(
-    token: str = Depends(oauth2_scheme)
-):
+def obtener_usuario_actual(token: str = Depends(oauth2_scheme)):
     credenciales_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="No se pudieron validar las credenciales",
@@ -50,36 +42,28 @@ def obtener_usuario_actual(
     )
 
     try:
-        payload = jwt.decode(
-            token,
-            SECRET_KEY,
-            algorithms=[ALGORITHM]
-        )
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
 
         usuario = payload.get("sub")
 
         if usuario is None:
             raise credenciales_exception
 
-        return {
-        "usuario": usuario,
-         "rol_id": payload.get("rol_id")
-}
-   
+        return {"usuario": usuario, "rol_id": payload.get("rol_id")}
+
     except JWTError:
         raise credenciales_exception
 
+
 def requiere_roles(roles_permitidos: list[int]):
 
-    def validador(
-        usuario_actual=Depends(obtener_usuario_actual)
-    ):
+    def validador(usuario_actual=Depends(obtener_usuario_actual)):
 
         if usuario_actual["rol_id"] not in roles_permitidos:
 
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail="No tiene permisos para realizar esta acción"
+                detail="No tiene permisos para realizar esta acción",
             )
 
         return usuario_actual

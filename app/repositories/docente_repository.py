@@ -10,7 +10,7 @@ class DocenteRepository:
 
     def listar(self):
         return self.db.query(DocenteDB).filter(DocenteDB.activo == True).all()
-    
+
     def listar_docentes_inactivos(self):
         return self.db.query(DocenteDB).filter(DocenteDB.activo == False).all()
 
@@ -38,7 +38,6 @@ class DocenteRepository:
         docente.nombre = datos.nombre
         docente.cargo_id = datos.cargo_id
         docente.activo = datos.activo
-
 
         self.db.commit()
         self.db.refresh(docente)

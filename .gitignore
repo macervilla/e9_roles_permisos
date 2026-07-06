@@ -1,8 +1,25 @@
+# Entornos virtuales
 venv/
+.venv/
+
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
 .pytest_cache/
-.vscode/
-.env
 .coverage
 htmlcov/
+
+# VS Code
+.vscode/
+
+# Variables de entorno
+.env
+.env.production
+
+# Logs
+*.log
+
+# Sistema operativo
+.DS_Store
+Thumbs.db

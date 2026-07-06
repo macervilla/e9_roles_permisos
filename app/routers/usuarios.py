@@ -1,17 +1,15 @@
 from fastapi import APIRouter, Depends
 
+from app.dependencies import get_usuario_service
 from app.schemas import (
     ActivoUpdate,
+    UsuarioClaveUpdate,
     UsuarioCreate,
     UsuarioResponse,
     UsuarioRolUpdate,
     UsuarioUpdate,
-    UsuarioClaveUpdate,
 )
-
 from app.services.usuario_service import UsuarioService
-from app.dependencies import get_usuario_service
-from app.schemas import CambiarClave
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
@@ -28,14 +26,16 @@ def listar_usuarios_inactivos(service: UsuarioService = Depends(get_usuario_serv
 
 @router.get("/{usuario_id}", response_model=UsuarioResponse)
 def obtener_usuario(
-    usuario_id: int, service: UsuarioService = Depends(get_usuario_service)
+    usuario_id: int,
+    service: UsuarioService = Depends(get_usuario_service),
 ):
     return service.obtener_usuario(usuario_id)
 
 
 @router.post("/", response_model=UsuarioResponse)
 def crear_usuario(
-    datos: UsuarioCreate, service: UsuarioService = Depends(get_usuario_service)
+    datos: UsuarioCreate,
+    service: UsuarioService = Depends(get_usuario_service),
 ):
     return service.crear_usuario(datos)
 
@@ -50,7 +50,7 @@ def actualizar_usuario(
 
 
 @router.put("/{usuario_id}/clave", response_model=UsuarioResponse)
-def cambiar_clave(
+def actualizar_clave(
     usuario_id: int,
     datos: UsuarioClaveUpdate,
     service: UsuarioService = Depends(get_usuario_service),
@@ -60,7 +60,8 @@ def cambiar_clave(
 
 @router.put("/{usuario_id}/blanquear-clave", response_model=UsuarioResponse)
 def blanquear_clave(
-    usuario_id: int, service: UsuarioService = Depends(get_usuario_service)
+    usuario_id: int,
+    service: UsuarioService = Depends(get_usuario_service),
 ):
     return service.blanquear_clave(usuario_id)
 
@@ -81,10 +82,3 @@ def cambiar_activo(
     service: UsuarioService = Depends(get_usuario_service),
 ):
     return service.cambiar_activo(usuario_id, datos.activo)
-
-
-@router.put("/{id}/cambiar-clave")
-def cambiar_clave(
-    id: int, datos: CambiarClave, service: UsuarioService = Depends(get_usuario_service)
-):
-    return service.cambiar_clave(id, datos.nueva_clave)

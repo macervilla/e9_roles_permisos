@@ -2,7 +2,6 @@ from app.models import RolDB, UsuarioDB
 
 
 class UsuarioRepository:
-
     def __init__(self, db):
         self.db = db
 

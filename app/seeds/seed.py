@@ -7,7 +7,6 @@ from app.seguridad import hashear_clave
 db: Session = SessionLocal()
 
 try:
-
     # ======================
     # ROLES
     # ======================
@@ -15,7 +14,6 @@ try:
     roles = ["Administrador", "Operador", "Consulta"]
 
     for nombre in roles:
-
         existe = db.query(RolDB).filter(RolDB.nombre == nombre).first()
 
         if not existe:
@@ -30,7 +28,6 @@ try:
     admin = db.query(UsuarioDB).filter(UsuarioDB.usuario == "admin").first()
 
     if not admin:
-
         rol_admin = db.query(RolDB).filter(RolDB.nombre == "Administrador").first()
 
         db.add(
@@ -48,5 +45,4 @@ try:
     print("Seed ejecutado correctamente.")
 
 finally:
-
     db.close()

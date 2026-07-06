@@ -2,7 +2,7 @@ from datetime import datetime, timedelta, timezone
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 from passlib.context import CryptContext
 
 SECRET_KEY = "clave_super_secreta_cambiar_en_produccion"
@@ -56,11 +56,8 @@ def obtener_usuario_actual(token: str = Depends(oauth2_scheme)):
 
 
 def requiere_roles(roles_permitidos: list[int]):
-
     def validador(usuario_actual=Depends(obtener_usuario_actual)):
-
         if usuario_actual["rol_id"] not in roles_permitidos:
-
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="No tiene permisos para realizar esta acción",

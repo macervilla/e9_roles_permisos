@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.dependencies import get_cargo_service
 from app.schemas import CargoCreate, CargoResponse, CargoUpdate
 from app.services.cargo_service import CargoService
-from app.dependencies import get_cargo_service
-from app.seguridad import obtener_usuario_actual, requiere_roles
 
 router = APIRouter(prefix="/cargos", tags=["Cargos"])
 

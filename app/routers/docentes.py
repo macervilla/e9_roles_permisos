@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 
+from app.dependencies import get_docente_service
 from app.schemas import ActivoUpdate, DocenteCreate, DocenteResponse
 from app.services.docente_service import DocenteService
-from app.dependencies import get_docente_service
 
 router = APIRouter(prefix="/docentes", tags=["Docentes"])
 

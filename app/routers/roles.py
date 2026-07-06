@@ -1,15 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException
 
+from app.dependencies import get_rol_service
 from app.schemas import RolCreate, RolResponse, RolUpdate
 from app.services.rol_service import RolService
-from app.dependencies import get_rol_service
 
 router = APIRouter(prefix="/roles", tags=["Roles"])
 
 
 @router.get("/", response_model=list[RolResponse])
 def listar_roles(service: RolService = Depends(get_rol_service)):
-
     return service.listar_roles()
 
 

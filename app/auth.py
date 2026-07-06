@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 from app.dependencies import get_db
 from app.models import UsuarioDB
 from app.schemas import Token
-from app.seguridad import verificar_clave, crear_token
+from app.seguridad import crear_token, verificar_clave
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 

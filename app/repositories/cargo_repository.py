@@ -1,9 +1,9 @@
 from sqlalchemy.orm import Session
+
 from app.models import CargoDB
 
 
 class CargoRepository:
-
     def __init__(self, db: Session):
         self.db = db
 

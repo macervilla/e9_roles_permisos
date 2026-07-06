@@ -5,7 +5,6 @@ from app.services.usuario_service import UsuarioService
 
 
 class MockRepository:
-
     def listar(self):
         return ["usuario1", "usuario2"]
 
@@ -18,7 +17,6 @@ class MockRepository:
         return None
 
     def obtener_por_usuario(self, usuario):
-
         if usuario == "existente":
 
             class Usuario:
@@ -41,7 +39,6 @@ def service():
 
 
 class DatosUsuario:
-
     def __init__(self, usuario, clave, rol_id):
         self.usuario = usuario
         self.clave = clave
@@ -67,9 +64,7 @@ def test_obtener_usuario_existente(service):
 
 
 def test_obtener_usuario_inexistente(service):
-
     with pytest.raises(HTTPException) as exc:
-
         service.obtener_usuario(999)
 
     assert exc.value.status_code == 404
@@ -77,7 +72,6 @@ def test_obtener_usuario_inexistente(service):
 
 
 def test_crear_usuario_correcto(service):
-
     datos = DatosUsuario(usuario="nuevo", clave="1234", rol_id=1)
 
     usuario = service.crear_usuario(datos)
@@ -88,11 +82,9 @@ def test_crear_usuario_correcto(service):
 
 
 def test_crear_usuario_existente(service):
-
     datos = DatosUsuario(usuario="existente", clave="1234", rol_id=1)
 
     with pytest.raises(HTTPException) as exc:
-
         service.crear_usuario(datos)
 
     assert exc.value.status_code == 400
@@ -100,11 +92,9 @@ def test_crear_usuario_existente(service):
 
 
 def test_crear_usuario_rol_inexistente(service):
-
     datos = DatosUsuario(usuario="nuevo", clave="1234", rol_id=999)
 
     with pytest.raises(HTTPException) as exc:
-
         service.crear_usuario(datos)
 
     assert exc.value.status_code == 400

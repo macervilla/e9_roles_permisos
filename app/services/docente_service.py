@@ -2,7 +2,6 @@ from fastapi import HTTPException
 
 
 class DocenteService:
-
     def __init__(self, repository):
         self.repository = repository
 

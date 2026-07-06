@@ -12,9 +12,7 @@ Responsabilidades:
 """
 
 import pytest
-
 from fastapi.testclient import TestClient
-
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
@@ -49,7 +47,6 @@ TestingSessionLocal = sessionmaker(
 
 @pytest.fixture(scope="function")
 def db_session():
-
     Base.metadata.create_all(bind=engine)
 
     db = TestingSessionLocal()
@@ -68,7 +65,6 @@ def db_session():
 
 @pytest.fixture(scope="function")
 def client(db_session):
-
     def override_get_db():
         try:
             yield db_session

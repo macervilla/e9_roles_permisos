@@ -1,9 +1,9 @@
 from fastapi import HTTPException
+
 from app.seguridad import hashear_clave
 
 
 class UsuarioService:
-
     def __init__(self, repository):
         self.repository = repository
 

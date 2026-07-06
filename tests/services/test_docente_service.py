@@ -1,8 +1,10 @@
+import pytest
+from fastapi import HTTPException
+
 from app.services.docente_service import DocenteService
 
 
 class MockDocenteRepository:
-
     def listar(self):
         return [
             {"id": 1, "nombre": "Juan", "apellido": "Perez"},
@@ -17,7 +19,6 @@ class MockDocenteRepository:
 
 
 def test_listar_docentes():
-
     repo_mock = MockDocenteRepository()
     service = DocenteService(repo_mock)
 
@@ -28,7 +29,6 @@ def test_listar_docentes():
 
 
 def test_obtener_docente_existente():
-
     repo_mock = MockDocenteRepository()
     service = DocenteService(repo_mock)
 
@@ -39,12 +39,11 @@ def test_obtener_docente_existente():
 
 
 def test_obtener_docente_inexistente():
-
     repo_mock = MockDocenteRepository()
     service = DocenteService(repo_mock)
 
-    try:
+    with pytest.raises(HTTPException) as exc:
         service.obtener_docente(99)
-        assert False
-    except Exception:
-        assert True
+
+    assert exc.value.status_code == 404
+    assert exc.value.detail == "Docente no encontrado"

@@ -2,7 +2,6 @@ from fastapi import HTTPException
 
 
 class RolService:
-
     def __init__(self, repository):
         self.repository = repository
 

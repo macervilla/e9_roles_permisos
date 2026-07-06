@@ -1,14 +1,14 @@
 import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.database import Base, engine
-
 from app.auth import router as auth_router
-from app.routers.usuarios import router as usuarios_router
+from app.database import Base, engine
 from app.routers.cargos import router as cargos_router
 from app.routers.docentes import router as docentes_router
 from app.routers.roles import router as roles_router
+from app.routers.usuarios import router as usuarios_router
 
 Base.metadata.create_all(bind=engine)
 

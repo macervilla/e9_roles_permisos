@@ -24,9 +24,7 @@ def get_database_url() -> str:
     db_user = os.getenv("DB_USER")
     db_password = os.getenv("DB_PASSWORD")
 
-    return (
-        f"mysql+pymysql://" f"{db_user}:{db_password}" f"@{db_host}:{db_port}/{db_name}"
-    )
+    return f"mysql+pymysql://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
 
 
 def create_db_engine():

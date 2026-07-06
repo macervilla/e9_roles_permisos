@@ -1,10 +1,10 @@
 from sqlalchemy.orm import Session
+
 from app.models import CargoDB, DocenteDB
 from app.schemas import DocenteCreate
 
 
 class DocenteRepository:
-
     def __init__(self, db: Session):
         self.db = db
 

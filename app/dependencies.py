@@ -1,3 +1,5 @@
+from fastapi import Depends
+
 from app.database import SessionLocal
 
 from app.repositories.cargo_repository import CargoRepository
@@ -19,41 +21,17 @@ def get_db():
         db.close()
 
 
-def get_cargo_service():
-    db = SessionLocal()
-    try:
-        repository = CargoRepository(db)
-        service = CargoService(repository)
-        yield service
-    finally:
-        db.close()
+def get_cargo_service(db=Depends(get_db)):
+    return CargoService(CargoRepository(db))
 
 
-def get_docente_service():
-    db = SessionLocal()
-    try:
-        repository = DocenteRepository(db)
-        service = DocenteService(repository)
-        yield service
-    finally:
-        db.close()
+def get_docente_service(db=Depends(get_db)):
+    return DocenteService(DocenteRepository(db))
 
 
-def get_rol_service():
-    db = SessionLocal()
-    try:
-        repository = RolRepository(db)
-        service = RolService(repository)
-        yield service
-    finally:
-        db.close()
+def get_rol_service(db=Depends(get_db)):
+    return RolService(RolRepository(db))
 
 
-def get_usuario_service():
-    db = SessionLocal()
-    try:
-        repository = UsuarioRepository(db)
-        service = UsuarioService(repository)
-        yield service
-    finally:
-        db.close()
+def get_usuario_service(db=Depends(get_db)):
+    return UsuarioService(UsuarioRepository(db))

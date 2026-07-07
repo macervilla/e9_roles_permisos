@@ -4,13 +4,13 @@ from sqlalchemy import engine_from_config, pool
 
 import app.models  # noqa: F401
 from alembic import context
-from app.database import DATABASE_URL, Base
+from app.database import Base, get_database_url
 
 # Configuración de Alembic
 config = context.config
 
 # Usar la misma conexión que FastAPI
-config.set_main_option("sqlalchemy.url", DATABASE_URL)
+config.set_main_option("sqlalchemy.url", get_database_url())
 
 # Configurar logging
 if config.config_file_name is not None:

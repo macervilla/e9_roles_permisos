@@ -2,6 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from app.dependencies import get_cargo_service
 from app.schemas import CargoCreate, CargoResponse, CargoUpdate
+from app.seguridad import requiere_roles
 from app.services.cargo_service import CargoService
 
 router = APIRouter(prefix="/cargos", tags=["Cargos"])
@@ -25,12 +26,20 @@ def obtener_cargo(cargo_id: int, service: CargoService = Depends(get_cargo_servi
         raise HTTPException(status_code=404, detail=str(error))
 
 
-@router.post("/", response_model=CargoResponse)
+@router.post(
+    "/",
+    response_model=CargoResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def crear_cargo(datos: CargoCreate, service: CargoService = Depends(get_cargo_service)):
     return service.crear_cargo(datos)
 
 
-@router.put("/{cargo_id}", response_model=CargoResponse)
+@router.put(
+    "/{cargo_id}",
+    response_model=CargoResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def actualizar_cargo(
     cargo_id: int,
     datos: CargoUpdate,
@@ -42,7 +51,11 @@ def actualizar_cargo(
         raise HTTPException(status_code=404, detail=str(error))
 
 
-@router.delete("/{cargo_id}", response_model=CargoResponse)
+@router.delete(
+    "/{cargo_id}",
+    response_model=CargoResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def eliminar_cargo(cargo_id: int, service: CargoService = Depends(get_cargo_service)):
     try:
         return service.eliminar_cargo(cargo_id)

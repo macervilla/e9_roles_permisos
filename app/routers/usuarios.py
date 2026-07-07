@@ -9,22 +9,35 @@ from app.schemas import (
     UsuarioRolUpdate,
     UsuarioUpdate,
 )
+from app.seguridad import requiere_roles
 from app.services.usuario_service import UsuarioService
 
 router = APIRouter(prefix="/usuarios", tags=["Usuarios"])
 
 
-@router.get("/", response_model=list[UsuarioResponse])
+@router.get(
+    "/",
+    response_model=list[UsuarioResponse],
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def listar_usuarios(service: UsuarioService = Depends(get_usuario_service)):
     return service.listar_usuarios()
 
 
-@router.get("/inactivos", response_model=list[UsuarioResponse])
+@router.get(
+    "/inactivos",
+    response_model=list[UsuarioResponse],
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def listar_usuarios_inactivos(service: UsuarioService = Depends(get_usuario_service)):
     return service.listar_usuarios_inactivos()
 
 
-@router.get("/{usuario_id}", response_model=UsuarioResponse)
+@router.get(
+    "/{usuario_id}",
+    response_model=UsuarioResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def obtener_usuario(
     usuario_id: int,
     service: UsuarioService = Depends(get_usuario_service),
@@ -32,7 +45,11 @@ def obtener_usuario(
     return service.obtener_usuario(usuario_id)
 
 
-@router.post("/", response_model=UsuarioResponse)
+@router.post(
+    "/",
+    response_model=UsuarioResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def crear_usuario(
     datos: UsuarioCreate,
     service: UsuarioService = Depends(get_usuario_service),
@@ -40,7 +57,11 @@ def crear_usuario(
     return service.crear_usuario(datos)
 
 
-@router.put("/{usuario_id}", response_model=UsuarioResponse)
+@router.put(
+    "/{usuario_id}",
+    response_model=UsuarioResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def actualizar_usuario(
     usuario_id: int,
     datos: UsuarioUpdate,
@@ -49,7 +70,11 @@ def actualizar_usuario(
     return service.actualizar_usuario(usuario_id, datos)
 
 
-@router.put("/{usuario_id}/clave", response_model=UsuarioResponse)
+@router.put(
+    "/{usuario_id}/clave",
+    response_model=UsuarioResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def actualizar_clave(
     usuario_id: int,
     datos: UsuarioClaveUpdate,
@@ -58,7 +83,11 @@ def actualizar_clave(
     return service.cambiar_clave(usuario_id, datos.clave)
 
 
-@router.put("/{usuario_id}/blanquear-clave", response_model=UsuarioResponse)
+@router.put(
+    "/{usuario_id}/blanquear-clave",
+    response_model=UsuarioResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def blanquear_clave(
     usuario_id: int,
     service: UsuarioService = Depends(get_usuario_service),
@@ -66,7 +95,11 @@ def blanquear_clave(
     return service.blanquear_clave(usuario_id)
 
 
-@router.put("/{usuario_id}/rol", response_model=UsuarioResponse)
+@router.put(
+    "/{usuario_id}/rol",
+    response_model=UsuarioResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def cambiar_rol(
     usuario_id: int,
     datos: UsuarioRolUpdate,
@@ -75,7 +108,11 @@ def cambiar_rol(
     return service.cambiar_rol(usuario_id, datos.rol_id)
 
 
-@router.put("/{usuario_id}/activo", response_model=UsuarioResponse)
+@router.put(
+    "/{usuario_id}/activo",
+    response_model=UsuarioResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def cambiar_activo(
     usuario_id: int,
     datos: ActivoUpdate,

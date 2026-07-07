@@ -2,36 +2,59 @@ from fastapi import APIRouter, Depends
 
 from app.dependencies import get_docente_service
 from app.schemas import ActivoUpdate, DocenteCreate, DocenteResponse
+from app.seguridad import obtener_usuario_actual, requiere_roles
 from app.services.docente_service import DocenteService
 
 router = APIRouter(prefix="/docentes", tags=["Docentes"])
 
 
-@router.get("/", response_model=list[DocenteResponse])
+@router.get(
+    "/",
+    response_model=list[DocenteResponse],
+    dependencies=[Depends(obtener_usuario_actual)],
+)
 def listar_docentes(service: DocenteService = Depends(get_docente_service)):
     return service.listar_docentes()
 
 
-@router.get("/inactivos", response_model=list[DocenteResponse])
+@router.get(
+    "/inactivos",
+    response_model=list[DocenteResponse],
+    dependencies=[Depends(obtener_usuario_actual)],
+)
 def listar_docentes_inactivos(service: DocenteService = Depends(get_docente_service)):
     return service.listar_docentes_inactivos()
 
 
-@router.get("/{docente_id}", response_model=DocenteResponse)
+@router.get(
+    "/{docente_id}",
+    response_model=DocenteResponse,
+    dependencies=[Depends(obtener_usuario_actual)],
+)
 def obtener_docente(
-    docente_id: int, service: DocenteService = Depends(get_docente_service)
+    docente_id: int,
+    service: DocenteService = Depends(get_docente_service),
 ):
     return service.obtener_docente(docente_id)
 
 
-@router.post("/", response_model=DocenteResponse)
+@router.post(
+    "/",
+    response_model=DocenteResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def crear_docente(
-    docente: DocenteCreate, service: DocenteService = Depends(get_docente_service)
+    docente: DocenteCreate,
+    service: DocenteService = Depends(get_docente_service),
 ):
     return service.crear_docente(docente)
 
 
-@router.put("/{docente_id}", response_model=DocenteResponse)
+@router.put(
+    "/{docente_id}",
+    response_model=DocenteResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def actualizar_docente(
     docente_id: int,
     docente: DocenteCreate,
@@ -40,7 +63,11 @@ def actualizar_docente(
     return service.actualizar_docente(docente_id, docente)
 
 
-@router.put("/{docente_id}/activo", response_model=DocenteResponse)
+@router.put(
+    "/{docente_id}/activo",
+    response_model=DocenteResponse,
+    dependencies=[Depends(requiere_roles([1]))],
+)
 def cambiar_activo(
     docente_id: int,
     datos: ActivoUpdate,

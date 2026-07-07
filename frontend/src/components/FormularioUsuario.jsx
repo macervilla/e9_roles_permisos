@@ -2,11 +2,14 @@ function FormularioUsuario({
   visible,
   usuarioEditandoId,
   nombre,
-  usuario,clave,
+  usuario,
+  clave,
   rolId,
   roles,
   activo,
-  setNombre,setUsuario,setClave,
+  setNombre,
+  setUsuario,
+  setClave,
   setRolId,
   setActivo,
   onGuardar,
@@ -24,12 +27,29 @@ function FormularioUsuario({
         value={nombre}
         onChange={(e) => setNombre(e.target.value)}
       />
+
       <label>Usuario:</label>
       <input
         type="text"
         value={usuario}
         onChange={(e) => setUsuario(e.target.value)}
       />
+
+      {usuarioEditandoId === null && (
+        <>
+          <br />
+          <br />
+
+          <label>Clave:</label>
+          <input
+            type="password"
+            value={clave}
+            onChange={(e) => setClave(e.target.value)}
+            placeholder="Si queda vacía, será igual al usuario"
+          />
+        </>
+      )}
+
       <br />
       <br />
 
@@ -59,9 +79,12 @@ function FormularioUsuario({
       <br />
       <br />
 
-      <button className="btn-guardar" onClick={onGuardar}>Guardar</button>
-      {" "}
-      <button className="btn-cancelar" onClick={onCancelar}>Cancelar</button>
+      <button className="btn-guardar" onClick={onGuardar}>
+        Guardar
+      </button>{" "}
+      <button className="btn-cancelar" onClick={onCancelar}>
+        Cancelar
+      </button>
     </div>
   );
 }

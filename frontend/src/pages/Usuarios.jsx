@@ -14,6 +14,7 @@ function Usuarios() {
 
   const [nombre, setNombre] = useState("");
   const [usuario, setUsuario] = useState("");
+  const [clave, setClave] = useState("");
   const [rolId, setRolId] = useState("");
   const [activo, setActivo] = useState(true);
 
@@ -48,6 +49,7 @@ function Usuarios() {
     setUsuarioEditandoId(null);
     setNombre("");
     setUsuario("");
+    setClave("");
     setRolId("");
     setActivo(true);
     setMostrarFormulario(true);
@@ -57,11 +59,8 @@ function Usuarios() {
     setUsuarioEditandoId(usuarioSeleccionado.id);
     setUsuario(usuarioSeleccionado.usuario);
     setNombre(usuarioSeleccionado.nombre);
-    setRolId(
-      usuarioSeleccionado.rol_id ||
-        usuarioSeleccionado.rolid ||
-        usuarioSeleccionado.id_rol
-    );
+    setClave("");
+    setRolId(usuarioSeleccionado.rol_id);
     setActivo(usuarioSeleccionado.activo);
     setMostrarFormulario(true);
   };
@@ -70,6 +69,7 @@ function Usuarios() {
     setUsuarioEditandoId(null);
     setNombre("");
     setUsuario("");
+    setClave("");
     setRolId("");
     setActivo(true);
     setMostrarFormulario(false);
@@ -84,6 +84,7 @@ function Usuarios() {
     };
 
     if (usuarioEditandoId === null) {
+      datosUsuario.clave = clave || usuario;
       await api.post("/usuarios/", datosUsuario);
     } else {
       await api.put(`/usuarios/${usuarioEditandoId}`, datosUsuario);
@@ -133,11 +134,13 @@ function Usuarios() {
         usuarioEditandoId={usuarioEditandoId}
         usuario={usuario}
         nombre={nombre}
+        clave={clave}
         rolId={rolId}
         activo={activo}
         roles={roles}
         setNombre={setNombre}
         setUsuario={setUsuario}
+        setClave={setClave}
         setRolId={setRolId}
         setActivo={setActivo}
         onGuardar={guardarUsuario}

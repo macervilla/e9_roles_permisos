@@ -3,10 +3,14 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from prometheus_fastapi_instrumentator import Instrumentator
+from slowapi import _rate_limit_exceeded_handler
+from slowapi.errors import RateLimitExceeded
 
 from app.auth import router as auth_router
+from app.cache.redis_client import redis_client
 from app.database import Base, engine
 from app.exceptions.handlers import global_exception_handler
+from app.limiter import limiter
 
 # logger.info("api_iniciada")
 from app.middlewares.logging_middleware import LoggingMiddleware
@@ -17,6 +21,7 @@ from app.routers.roles import router as roles_router
 from app.routers.usuarios import router as usuarios_router
 
 Base.metadata.create_all(bind=engine)
+
 
 app = FastAPI(
     title="Etapa e9 - Roles y permisos",
@@ -40,6 +45,11 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.state.limiter = limiter
+app.add_exception_handler(
+    RateLimitExceeded,
+    _rate_limit_exceeded_handler,
+)
 
 app.include_router(auth_router)
 app.include_router(usuarios_router)
@@ -57,3 +67,10 @@ def inicio():
 @app.get("/error")
 def provocar_error():
     return 1 / 0
+
+
+@app.get("/redis")
+def probar_redis():
+    redis_client.set("hola", "mundo")
+
+    return {"redis": redis_client.get("hola")}

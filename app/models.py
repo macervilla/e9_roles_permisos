@@ -1,6 +1,19 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
+from datetime import datetime, timezone
+
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 
 from app.database import Base
+
+
+class RefreshTokenDB(Base):
+    __tablename__ = "refresh_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    usuario_id = Column(Integer, ForeignKey("usuarios.id"), nullable=False)
+    token_hash = Column(String(255), nullable=False, unique=True, index=True)
+    activo = Column(Boolean, default=True)
+    creado_en = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    expira_en = Column(DateTime, nullable=False)
 
 
 class RolDB(Base):

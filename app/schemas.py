@@ -106,11 +106,19 @@ class UsuarioRolUpdate(BaseModel):
 
 
 # ---------- JWT ----------
+# ---------- JWT ----------
+
+
 class Token(BaseModel):
     access_token: str
+    refresh_token: str
     token_type: str
     rol_id: int
     nombre: str
+
+
+class RefreshTokenRequest(BaseModel):
+    refresh_token: str
 
 
 class CambiarClave(BaseModel):

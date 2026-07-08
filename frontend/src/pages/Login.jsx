@@ -25,9 +25,11 @@ function Login() {
       });
 
       localStorage.setItem("token", response.data.access_token);
+      localStorage.setItem("refresh_token", response.data.refresh_token);
       localStorage.setItem("rol_id", response.data.rol_id);
       localStorage.setItem("nombre", response.data.nombre);
-
+      
+    
       navigate("/dashboard");
     } catch (error) {
       console.error(error);

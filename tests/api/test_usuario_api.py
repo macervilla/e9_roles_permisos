@@ -3,38 +3,64 @@ from app.seguridad import hashear_clave, verificar_clave
 
 
 def crear_admin_y_token(client, db_session):
-    db_session.add(RolDB(id=1, nombre="admin", activo=True))
-    db_session.commit()
+    rol_admin = db_session.query(RolDB).filter(RolDB.id == 1).first()
 
-    admin = UsuarioDB(
-        usuario="admin",
-        clave=hashear_clave("1234"),
-        nombre="Administrador",
-        rol_id=1,
-        activo=True,
-    )
-    db_session.add(admin)
-    db_session.commit()
-    db_session.refresh(admin)
+    if not rol_admin:
+        db_session.add(RolDB(id=1, nombre="admin", activo=True))
+        db_session.commit()
+
+    admin = db_session.query(UsuarioDB).filter(UsuarioDB.usuario == "admin").first()
+
+    if not admin:
+        admin = UsuarioDB(
+            usuario="admin",
+            clave=hashear_clave("1234"),
+            nombre="Administrador",
+            rol_id=1,
+            activo=True,
+        )
+        db_session.add(admin)
+        db_session.commit()
+        db_session.refresh(admin)
 
     response = client.post(
         "/auth/login",
         data={"username": "admin", "password": "1234"},
     )
 
-    token = response.json()["access_token"]
+    assert response.status_code == 200, response.json()
+
+    data = response.json()
+
+    token = data.get("access_token") or data.get("access") or data.get("token")
+
+    assert token is not None, f"Login no devolvió token. Respuesta: {data}"
 
     return {"Authorization": f"Bearer {token}"}
 
 
 def crear_rol(db_session, rol_id=2, nombre="consulta"):
+    rol = db_session.query(RolDB).filter(RolDB.id == rol_id).first()
+
+    if rol:
+        return rol
+
     rol = RolDB(id=rol_id, nombre=nombre, activo=True)
     db_session.add(rol)
     db_session.commit()
+    db_session.refresh(rol)
+
     return rol
 
 
 def crear_usuario(db_session, usuario="juan", rol_id=1, activo=True):
+    existente = db_session.query(UsuarioDB).filter(UsuarioDB.usuario == usuario).first()
+
+    if existente:
+        return existente
+
+    crear_rol(db_session, rol_id=rol_id, nombre="admin" if rol_id == 1 else "consulta")
+
     nuevo = UsuarioDB(
         usuario=usuario,
         clave=hashear_clave("1234"),
@@ -42,9 +68,11 @@ def crear_usuario(db_session, usuario="juan", rol_id=1, activo=True):
         rol_id=rol_id,
         activo=activo,
     )
+
     db_session.add(nuevo)
     db_session.commit()
     db_session.refresh(nuevo)
+
     return nuevo
 
 
@@ -111,7 +139,7 @@ def test_crear_usuario_sin_token(client):
     response = client.post(
         "/usuarios/",
         json={
-            "usuario": "nuevo",
+            "usuario": "nuevo_sin_token",
             "clave": "1234",
             "nombre": "Usuario Nuevo",
             "rol_id": 1,
@@ -146,7 +174,7 @@ def test_crear_usuario_rol_inexistente(client, db_session):
     response = client.post(
         "/usuarios/",
         json={
-            "usuario": "nuevo",
+            "usuario": "nuevo_rol_inexistente",
             "clave": "1234",
             "nombre": "Usuario Nuevo",
             "rol_id": 999,
@@ -235,12 +263,12 @@ def test_actualizar_usuario_duplicado(client, db_session):
 
 def test_actualizar_usuario_rol_inexistente(client, db_session):
     headers = crear_admin_y_token(client, db_session)
-    usuario = crear_usuario(db_session, usuario="usuario", rol_id=1)
+    usuario = crear_usuario(db_session, usuario="usuario_rol_invalido", rol_id=1)
 
     response = client.put(
         f"/usuarios/{usuario.id}",
         json={
-            "usuario": "usuario",
+            "usuario": "usuario_rol_invalido",
             "nombre": "Usuario",
             "rol_id": 999,
             "activo": True,

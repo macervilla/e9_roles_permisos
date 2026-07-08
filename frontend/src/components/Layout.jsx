@@ -1,4 +1,5 @@
 import { Link, Outlet } from "react-router-dom";
+import api from "../api/axios";
 import {
   obtenerNombre,
   nombreRol,
@@ -7,15 +8,25 @@ import {
 } from "../utils/permisos";
 
 function Layout() {
-  const cerrarSesion = () => {
-  localStorage.removeItem("token");
-  localStorage.removeItem("rol_id");
-  localStorage.removeItem("nombre");
+  const cerrarSesion = async () => {
+    const refreshToken = localStorage.getItem("refresh_token");
 
-  const esProduccion = window.location.hostname === "acersistemas.site";
+    try {
+      if (refreshToken) {
+        await api.post("/auth/logout", {
+          refresh_token: refreshToken,
+        });
+      }
+    } catch (error) {
+      console.error("Error al cerrar sesión:", error);
+    }
 
-  window.location.href = esProduccion ? "/e9/login" : "/login";
-};
+    localStorage.clear();
+
+    const esProduccion = window.location.hostname === "acersistemas.site";
+    window.location.href = esProduccion ? "/e9/login" : "/login";
+  };
+
   return (
     <div className="layout">
       <aside className="sidebar">
@@ -30,9 +41,7 @@ function Layout() {
         <nav className="menu">
           <Link to="/dashboard">Dashboard</Link>
 
-          {(esAdmin() || esOperador()) && (
-            <Link to="/cargos">Cargos</Link>
-          )}
+          {(esAdmin() || esOperador()) && <Link to="/cargos">Cargos</Link>}
 
           <Link to="/docentes">Docentes</Link>
 

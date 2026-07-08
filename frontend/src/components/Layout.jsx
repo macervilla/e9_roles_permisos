@@ -8,12 +8,14 @@ import {
 
 function Layout() {
   const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("rol_id");
-    localStorage.removeItem("nombre");
-    window.location.href = "/login";
-  };
+  localStorage.removeItem("token");
+  localStorage.removeItem("rol_id");
+  localStorage.removeItem("nombre");
 
+  const esProduccion = window.location.hostname === "acersistemas.site";
+
+  window.location.href = esProduccion ? "/e9/login" : "/login";
+};
   return (
     <div className="layout">
       <aside className="sidebar">

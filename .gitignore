@@ -23,3 +23,14 @@ htmlcov/
 # Sistema operativo
 .DS_Store
 Thumbs.db
+
+
+# Coverage
+coverage.xml
+htmlcov/
+
+# Pytest
+.pytest_cache/
+
+# Coverage data
+.coverage

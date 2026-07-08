@@ -24,6 +24,16 @@ jobs:
           --health-timeout=5s
           --health-retries=10
 
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd="redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=10
+
     steps:
       - name: Clonar repositorio
         uses: actions/checkout@v4
@@ -38,7 +48,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Ejecutar tests con Pytest
+      - name: Ejecutar tests con cobertura
         env:
           PYTHONPATH: .
           DB_HOST: 127.0.0.1
@@ -46,6 +56,16 @@ jobs:
           DB_USER: root
           DB_PASSWORD: root
           DB_NAME: dbe8_test
+          REDIS_HOST: 127.0.0.1
+          REDIS_PORT: 6379
           SECRET_KEY: test_secret_key
+          TESTING: "1"
         run: |
-          pytest -v
+          pytest
+
+      - name: Subir cobertura a Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          files: ./coverage.xml
+          fail_ci_if_error: true
+          verbose: true

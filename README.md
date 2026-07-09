@@ -2,7 +2,11 @@
 
 ![CI](https://github.com/macervilla/e9_roles_permisos/actions/workflows/ci.yml/badge.svg)
 ![Coverage](https://codecov.io/gh/macervilla/e9_roles_permisos/branch/main/graph/badge.svg)
+# e9 - Roles y Permisos
 
+[![CI - FastAPI Tests](https://github.com/macervilla/e9_roles_permisos/actions/workflows/ci.yml/badge.svg)](https://github.com/macervilla/e9_roles_permisos/actions/workflows/ci.yml)
+
+[![codecov](https://codecov.io/gh/macervilla/e9_roles_permisos/branch/main/graph/badge.svg)](https://app.codecov.io/gh/macervilla/e9_roles_permisos)
 Proyecto Full Stack desarrollado como práctica de arquitectura moderna con **FastAPI + React**, incorporando autenticación JWT, control de acceso basado en roles, cache con Redis, observabilidad, Docker, CI/CD y testing automatizado.
 
 ---

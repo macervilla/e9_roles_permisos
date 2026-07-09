@@ -1,72 +1,110 @@
 # e9 - Roles y Permisos
 
-![CI](https://github.com/macervilla/e9_roles_permisos/actions/workflows/ci.yml/badge.svg)
-![Coverage](https://codecov.io/gh/macervilla/e9_roles_permisos/branch/main/graph/badge.svg)
-# e9 - Roles y Permisos
-
 [![CI - FastAPI Tests](https://github.com/macervilla/e9_roles_permisos/actions/workflows/ci.yml/badge.svg)](https://github.com/macervilla/e9_roles_permisos/actions/workflows/ci.yml)
+[![Codecov](https://codecov.io/gh/macervilla/e9_roles_permisos/branch/main/graph/badge.svg)](https://app.codecov.io/gh/macervilla/e9_roles_permisos)
 
-[![codecov](https://codecov.io/gh/macervilla/e9_roles_permisos/branch/main/graph/badge.svg)](https://app.codecov.io/gh/macervilla/e9_roles_permisos)
-Proyecto Full Stack desarrollado como práctica de arquitectura moderna con **FastAPI + React**, incorporando autenticación JWT, control de acceso basado en roles, cache con Redis, observabilidad, Docker, CI/CD y testing automatizado.
+Proyecto Full Stack desarrollado como práctica de arquitectura moderna utilizando **FastAPI + React**, incorporando autenticación JWT, control de acceso basado en roles, cache con Redis, observabilidad, Docker, CI/CD y testing automatizado.
 
 ---
 
-# Tecnologías
+# 📊 Calidad del proyecto
+
+| Recurso | Acceso |
+|---------|---------|
+| 🚀 CI/CD | [Ver GitHub Actions](https://github.com/macervilla/e9_roles_permisos/actions/workflows/ci.yml) |
+| 📈 Cobertura | [Ver reporte en Codecov](https://app.codecov.io/gh/macervilla/e9_roles_permisos) |
+| 📄 Swagger | `http://localhost:8000/docs` *(cuando el backend está en ejecución)* |
+
+---
+
+# 🚀 Tecnologías
+
+### Backend
 
 - FastAPI
-- React + Vite
 - SQLAlchemy
+- Alembic
 - MySQL
 - Redis
-- JWT + Refresh Token Rotation
-- Alembic
-- Docker & Docker Compose
+- JWT Authentication
+- Refresh Token Rotation
+- Repository Pattern
+- Dependency Injection
+
+### Frontend
+
+- React
+- Vite
+- Axios
+
+### DevOps
+
+- Docker
+- Docker Compose
 - GitHub Actions
-- Pytest
 - Codecov
 
----
+### Testing y Calidad
 
-# Funcionalidades
-
-- Login con JWT
-- Refresh Token con rotación
-- Roles y permisos
-- CRUD de Usuarios
-- CRUD de Docentes
-- CRUD de Cargos
-- Cache con Redis
-- Logging estructurado
-- Correlation ID
-- Health Checks
-- Métricas Prometheus
-- Docker Compose
-- CI/CD con GitHub Actions
-- Cobertura de código con Codecov
-- Tests Unitarios
-- Tests de API
-- Tests End-to-End
+- Pytest
+- Coverage
+- Ruff
+- Black
+- isort
+- pre-commit
 
 ---
 
-# Estructura
+# ✨ Funcionalidades
 
-```
+- ✅ Login con JWT
+- ✅ Refresh Token con rotación
+- ✅ Roles y permisos
+- ✅ CRUD de Usuarios
+- ✅ CRUD de Docentes
+- ✅ CRUD de Cargos
+- ✅ Cache con Redis
+- ✅ Logging profesional
+- ✅ Correlation ID
+- ✅ Health Checks
+- ✅ Métricas para Prometheus
+- ✅ Docker Compose
+- ✅ GitHub Actions
+- ✅ Cobertura de código con Codecov
+- ✅ Tests Unitarios
+- ✅ Tests de API
+- ✅ Tests End-to-End (E2E)
+
+---
+
+# 📁 Estructura del proyecto
+
+```text
 .
+├── .github/
+│   └── workflows/
+├── alembic/
 ├── app/
+│   ├── cache/
+│   ├── middleware/
+│   ├── repositories/
+│   ├── routers/
+│   ├── services/
+│   └── ...
+├── docker/
 ├── frontend/
 ├── tests/
-├── alembic/
-├── docker/
-├── .github/
 ├── Dockerfile
 ├── docker-compose.yml
+├── requirements.txt
 └── README.md
 ```
 
 ---
 
-# Instalación
+# ⚙️ Instalación
+
+## Clonar el repositorio
 
 ```bash
 git clone https://github.com/macervilla/e9_roles_permisos.git
@@ -74,31 +112,59 @@ git clone https://github.com/macervilla/e9_roles_permisos.git
 cd e9_roles_permisos
 ```
 
-Instalar dependencias
+## Instalar dependencias
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Levantar el proyecto
+## Configurar variables de entorno
+
+Crear el archivo `.env` utilizando como base el archivo `.env.example`.
+
+---
+
+# 🐳 Ejecutar con Docker
 
 ```bash
 docker compose up --build
 ```
 
-Backend
+---
+
+# ▶️ Ejecutar en desarrollo
+
+## Backend
+
+```bash
+uvicorn app.main:app --reload
+```
+
+## Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+---
+
+# 🌐 Accesos
+
+## Backend
 
 ```
 http://localhost:8000
 ```
 
-Swagger
+## Swagger
 
 ```
 http://localhost:8000/docs
 ```
 
-Frontend
+## Frontend
 
 ```
 http://localhost:5173
@@ -106,7 +172,7 @@ http://localhost:5173
 
 ---
 
-# Testing
+# 🧪 Testing
 
 Ejecutar todos los tests
 
@@ -114,31 +180,58 @@ Ejecutar todos los tests
 pytest
 ```
 
-Cobertura
+Generar cobertura
 
 ```bash
 pytest --cov=app --cov-report=html
 ```
 
----
+Abrir reporte HTML
 
-# Calidad del código
-
-Este proyecto utiliza:
-
-- Ruff
-- Black
-- isort
-- pre-commit
-- GitHub Actions
-- Codecov
+```
+htmlcov/index.html
+```
 
 ---
 
-# Roadmap implementado
+# 📈 Integración Continua
+
+Cada **push** o **Pull Request** ejecuta automáticamente:
+
+- Instalación de dependencias
+- Levantamiento de MySQL
+- Levantamiento de Redis
+- Ejecución de Pytest
+- Generación de cobertura
+- Publicación del reporte en Codecov
+
+---
+
+# 🏗️ Arquitectura
+
+El proyecto implementa:
+
+- Repository Pattern
+- Service Layer
+- Dependency Injection
+- JWT Authentication
+- Refresh Token Rotation
+- Redis Cache
+- Logging Middleware
+- Correlation ID
+- Health Checks
+- Observabilidad
+- Docker
+- CI/CD
+
+---
+
+# 🛣️ Roadmap implementado
 
 - ✅ FastAPI
+- ✅ React
 - ✅ SQLAlchemy
+- ✅ Alembic
 - ✅ Repository Pattern
 - ✅ Dependency Injection
 - ✅ JWT
@@ -150,7 +243,7 @@ Este proyecto utiliza:
 - ✅ Health Checks
 - ✅ Prometheus
 - ✅ Docker
-- ✅ Alembic
+- ✅ Docker Compose
 - ✅ GitHub Actions
 - ✅ Codecov
 - ✅ Pytest
@@ -158,6 +251,8 @@ Este proyecto utiliza:
 
 ---
 
-# Autor
+# 👨‍💻 Autor
 
-Alejandro Cervilla
+**Alejandro Cervilla**
+
+Proyecto desarrollado como práctica para consolidar conocimientos de desarrollo Backend y Full Stack con FastAPI, React y buenas prácticas de ingeniería de software.

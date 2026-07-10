@@ -54,8 +54,13 @@ def test_crear_rol(client, db_session):
     assert data["activo"] is True
 
 
-def test_obtener_rol_inexistente(client):
-    response = client.get("/roles/999")
+def test_obtener_rol_inexistente(client, db_session):
+    headers = crear_admin_y_token(client, db_session)
+
+    response = client.get(
+        "/roles/999",
+        headers=headers,
+    )
 
     assert response.status_code == 404
 

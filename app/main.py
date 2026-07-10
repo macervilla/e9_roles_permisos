@@ -20,8 +20,8 @@ from app.routers.health import router as health_router
 from app.routers.roles import router as roles_router
 from app.routers.usuarios import router as usuarios_router
 
-Base.metadata.create_all(bind=engine)
-
+if os.getenv("TESTING") != "1":
+    Base.metadata.create_all(bind=engine)
 
 app = FastAPI(
     title="Etapa e9 - Roles y permisos",

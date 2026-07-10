@@ -26,7 +26,7 @@ class RolService:
         rol = self.repository.actualizar(rol_id, datos)
 
         if not rol:
-            raise ValueError("Rol no encontrado")
+            raise HTTPException(status_code=404, detail="Rol no encontrado")
 
         return rol
 
@@ -34,6 +34,6 @@ class RolService:
         rol = self.repository.eliminar(rol_id)
 
         if not rol:
-            raise ValueError("Rol no encontrado")
+            raise HTTPException(status_code=404, detail="Rol no encontrado")
 
         return rol

@@ -20,8 +20,14 @@ class DocenteRepository:
     def existe_cargo(self, cargo_id: int):
         return self.db.query(CargoDB).filter(CargoDB.id == cargo_id).first() is not None
 
-    def crear(self, docente: DocenteCreate):
-        nuevo_docente = DocenteDB(**docente.model_dump())
+    def crear(self, datos):
+        nuevo_docente = DocenteDB(
+            nombre=datos.nombre,
+            cargo_id=datos.cargo_id,
+            provincia_id_georef=datos.provincia_id_georef,
+            localidad_id_georef=datos.localidad_id_georef,
+            activo=datos.activo,
+        )
 
         self.db.add(nuevo_docente)
         self.db.commit()
@@ -38,6 +44,8 @@ class DocenteRepository:
         docente.nombre = datos.nombre
         docente.cargo_id = datos.cargo_id
         docente.activo = datos.activo
+        docente.provincia_id_georef = datos.provincia_id_georef
+        docente.localidad_id_georef = datos.localidad_id_georef
 
         self.db.commit()
         self.db.refresh(docente)

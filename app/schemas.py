@@ -57,6 +57,8 @@ class DocenteCreate(BaseModel):
     nombre: str
     cargo_id: int
     activo: bool = True
+    provincia_id_georef: str | None = None
+    localidad_id_georef: str | None = None
 
 
 class DocenteResponse(BaseModel):
@@ -64,6 +66,12 @@ class DocenteResponse(BaseModel):
     nombre: str
     cargo_id: int
     activo: bool
+
+    provincia_id_georef: str | None = None
+    localidad_id_georef: str | None = None
+
+    provincia_nombre: str | None = None
+    localidad_nombre: str | None = None
 
     class Config:
         from_attributes = True

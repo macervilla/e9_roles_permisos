@@ -14,6 +14,7 @@ from app.limiter import limiter
 
 # logger.info("api_iniciada")
 from app.middlewares.logging_middleware import LoggingMiddleware
+from app.routers import geografia
 from app.routers.cargos import router as cargos_router
 from app.routers.docentes import router as docentes_router
 from app.routers.health import router as health_router
@@ -58,6 +59,8 @@ app.include_router(cargos_router)
 app.include_router(docentes_router)
 app.include_router(roles_router)
 app.include_router(health_router)
+
+app.include_router(geografia.router)
 
 
 @app.get("/")

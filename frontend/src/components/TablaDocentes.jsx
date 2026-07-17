@@ -13,6 +13,8 @@ function TablaDocentes({ docentes, cargos, onEditar }) {
           <th>Nombre</th>
           <th>Cargo</th>
           <th>Activo</th>
+          <th>Provincia</th>
+          <th>Localidad</th>
           <th>Acciones</th>
         </tr>
       </thead>
@@ -24,6 +26,8 @@ function TablaDocentes({ docentes, cargos, onEditar }) {
             <td>{docente.nombre}</td>
             <td>{obtenerNombreCargo(docente)}</td>
             <td>{docente.activo ? "Sí" : "No"}</td>
+            <td>{docente.provincia_nombre}</td>
+            <td>{docente.localidad_nombre}</td>
             <td>
               <button className="btn-editar" onClick={() => onEditar(docente)}>Editar</button>
             </td>

@@ -49,4 +49,7 @@ class DocenteDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     nombre = Column(String(100), nullable=False)
     cargo_id = Column(Integer, ForeignKey("cargos.id"), nullable=False)
+    provincia_id_georef = Column(String(10), nullable=True)
+    localidad_id_georef = Column(String(20), nullable=True)
+
     activo = Column(Boolean, default=True)

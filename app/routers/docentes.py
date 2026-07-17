@@ -5,7 +5,10 @@ from app.schemas import ActivoUpdate, DocenteCreate, DocenteResponse
 from app.seguridad import obtener_usuario_actual, requiere_roles
 from app.services.docente_service import DocenteService
 
-router = APIRouter(prefix="/docentes", tags=["Docentes"])
+router = APIRouter(
+    prefix="/docentes",
+    tags=["Docentes"],
+)
 
 
 @router.get(
@@ -13,8 +16,10 @@ router = APIRouter(prefix="/docentes", tags=["Docentes"])
     response_model=list[DocenteResponse],
     dependencies=[Depends(obtener_usuario_actual)],
 )
-def listar_docentes(service: DocenteService = Depends(get_docente_service)):
-    return service.listar_docentes()
+async def listar_docentes(
+    service: DocenteService = Depends(get_docente_service),
+):
+    return await service.listar_docentes()
 
 
 @router.get(
@@ -22,8 +27,10 @@ def listar_docentes(service: DocenteService = Depends(get_docente_service)):
     response_model=list[DocenteResponse],
     dependencies=[Depends(obtener_usuario_actual)],
 )
-def listar_docentes_inactivos(service: DocenteService = Depends(get_docente_service)):
-    return service.listar_docentes_inactivos()
+async def listar_docentes_inactivos(
+    service: DocenteService = Depends(get_docente_service),
+):
+    return await service.listar_docentes_inactivos()
 
 
 @router.get(
@@ -31,11 +38,11 @@ def listar_docentes_inactivos(service: DocenteService = Depends(get_docente_serv
     response_model=DocenteResponse,
     dependencies=[Depends(obtener_usuario_actual)],
 )
-def obtener_docente(
+async def obtener_docente(
     docente_id: int,
     service: DocenteService = Depends(get_docente_service),
 ):
-    return service.obtener_docente(docente_id)
+    return await service.obtener_docente(docente_id)
 
 
 @router.post(
@@ -60,7 +67,10 @@ def actualizar_docente(
     docente: DocenteCreate,
     service: DocenteService = Depends(get_docente_service),
 ):
-    return service.actualizar_docente(docente_id, docente)
+    return service.actualizar_docente(
+        docente_id,
+        docente,
+    )
 
 
 @router.put(
@@ -73,4 +83,7 @@ def cambiar_activo(
     datos: ActivoUpdate,
     service: DocenteService = Depends(get_docente_service),
 ):
-    return service.cambiar_activo(docente_id, datos.activo)
+    return service.cambiar_activo(
+        docente_id,
+        datos.activo,
+    )

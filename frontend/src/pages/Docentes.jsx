@@ -9,6 +9,8 @@ function Docentes() {
 
   const [docentes, setDocentes] = useState([]);
   const [cargos, setCargos] = useState([]);
+  const [provincias, setProvincias] = useState([]);
+  const [localidades, setLocalidades] = useState([]);
 
   const [mostrarFormulario, setMostrarFormulario] = useState(false);
   const [docenteEditandoId, setDocenteEditandoId] = useState(null);
@@ -16,56 +18,117 @@ function Docentes() {
   const [nombre, setNombre] = useState("");
   const [cargoId, setCargoId] = useState("");
   const [activo, setActivo] = useState(true);
+  const [provinciaId, setProvinciaId] = useState("");
+  const [localidadId, setLocalidadId] = useState("");
 
   useEffect(() => {
     cargarDocentes();
     cargarCargos();
+    cargarProvincias();
   }, [mostrarInactivos]);
 
   const cargarDocentes = async () => {
     try {
-      const url = mostrarInactivos ? "/docentes/inactivos" : "/docentes/";
-
-      console.log("URL DOCENTES:", url);
+      const url = mostrarInactivos
+        ? "/docentes/inactivos"
+        : "/docentes/";
 
       const respuesta = await api.get(url);
-
-      console.log("RESPUESTA DOCENTES:", respuesta);
-      console.log("DATA DOCENTES:", respuesta.data);
-
       setDocentes(respuesta.data);
     } catch (error) {
-      console.error("ERROR CARGANDO DOCENTES:", error);
+      console.error("Error cargando docentes:", error);
     }
   };
 
   const cargarCargos = async () => {
     try {
       const respuesta = await api.get("/cargos/");
-    /*  console.log("DATA CARGOS:", respuesta.data);*/
       setCargos(respuesta.data);
     } catch (error) {
-      /*  console.error("ERROR CARGANDO CARGOS:", error); */
+      console.error("Error cargando cargos:", error);
     }
   };
 
- /* console.log("DOCENTES EN RENDER:", docentes);
-  console.log("CARGOS EN RENDER:", cargos);
-*/
+  const ordenarPorNombre = (elementos) => {
+  return [...elementos].sort((a, b) =>
+    a.nombre.localeCompare(b.nombre, "es", {
+      sensitivity: "base",
+    })
+  );
+};
+
+const cargarProvincias = async () => {
+  try {
+    const respuesta = await api.get("/geografia/provincias");
+
+    setProvincias(
+      ordenarPorNombre(respuesta.data)
+    );
+  } catch (error) {
+    console.error("Error cargando provincias:", error);
+    setProvincias([]);
+  }
+};
+
+const cargarLocalidades = async (nombreProvincia) => {
+  if (!nombreProvincia) {
+    setLocalidades([]);
+    return;
+  }
+
+  try {
+    const respuesta = await api.get("/geografia/localidades", {
+      params: {
+        provincia: nombreProvincia,
+      },
+    });
+
+    setLocalidades(
+      ordenarPorNombre(respuesta.data)
+    );
+  } catch (error) {
+    console.error("Error cargando localidades:", error);
+    setLocalidades([]);
+  }
+};
   const nuevoDocente = () => {
     setDocenteEditandoId(null);
     setNombre("");
     setCargoId("");
     setActivo(true);
+    setProvinciaId("");
+    setLocalidadId("");
+    setLocalidades([]);
     setMostrarFormulario(true);
   };
 
-  const editarDocente = (docente) => {
+  const editarDocente = async (docente) => {
+    const provinciaSeleccionada =
+      docente.provincia_id_georef || "";
+
     setDocenteEditandoId(docente.id);
     setNombre(docente.nombre);
-    setCargoId(docente.cargo_id || docente.cargoid || docente.id_cargo);
+    setCargoId(
+      docente.cargo_id ||
+      docente.cargoid ||
+      docente.id_cargo ||
+      ""
+    );
     setActivo(docente.activo);
+    setProvinciaId(provinciaSeleccionada);
+    setLocalidadId(docente.localidad_id_georef || "");
+    setLocalidades([]);
     setMostrarFormulario(true);
+
+    if (provinciaSeleccionada) {
+      const provincia = provincias.find(
+        (item) => String(item.id) === String(provinciaSeleccionada)
+      );
+
+      if (provincia) {
+        await cargarLocalidades(provincia.nombre);
+      }
+    }
   };
 
   const limpiarFormulario = () => {
@@ -73,24 +136,52 @@ function Docentes() {
     setNombre("");
     setCargoId("");
     setActivo(true);
+    setProvinciaId("");
+    setLocalidadId("");
+    setLocalidades([]);
     setMostrarFormulario(false);
   };
 
   const guardarDocente = async () => {
-    const datosDocente = {
-      nombre: nombre,
-      cargo_id: Number(cargoId),
-      activo: activo,
-    };
-
-    if (docenteEditandoId === null) {
-      await api.post("/docentes/", datosDocente);
-    } else {
-      await api.put(`/docentes/${docenteEditandoId}`, datosDocente);
+    if (!nombre.trim()) {
+      alert("Debe ingresar el nombre del docente.");
+      return;
     }
 
-    await cargarDocentes();
-    limpiarFormulario();
+    if (!cargoId) {
+      alert("Debe seleccionar un cargo.");
+      return;
+    }
+
+    const datosDocente = {
+      nombre: nombre.trim(),
+      cargo_id: Number(cargoId),
+      activo,
+      provincia_id_georef: provinciaId || null,
+      localidad_id_georef: localidadId || null,
+    };
+
+    try {
+      if (docenteEditandoId === null) {
+        await api.post("/docentes/", datosDocente);
+      } else {
+        await api.put(
+          `/docentes/${docenteEditandoId}`,
+          datosDocente
+        );
+      }
+
+      await cargarDocentes();
+      limpiarFormulario();
+    } catch (error) {
+      console.error("Error guardando docente:", error);
+
+      const mensaje =
+        error.response?.data?.detail ||
+        "No se pudo guardar el docente.";
+
+      alert(mensaje);
+    }
   };
 
   return (
@@ -99,14 +190,25 @@ function Docentes() {
 
       <div className="barra-acciones">
         <button
-          className={mostrarInactivos ? "btn-inactivos" : "btn-activos"}
-          onClick={() => setMostrarInactivos(!mostrarInactivos)}
+          className={
+            mostrarInactivos
+              ? "btn-inactivos"
+              : "btn-activos"
+          }
+          onClick={() =>
+            setMostrarInactivos(!mostrarInactivos)
+          }
           style={{ width: "150px" }}
         >
-          {mostrarInactivos ? "Ver activos" : "Ver inactivos"}
+          {mostrarInactivos
+            ? "Ver activos"
+            : "Ver inactivos"}
         </button>
 
-        <button className="btn-nuevo" onClick={nuevoDocente}>
+        <button
+          className="btn-nuevo"
+          onClick={nuevoDocente}
+        >
           Nuevo Docente
         </button>
       </div>
@@ -118,9 +220,16 @@ function Docentes() {
         cargoId={cargoId}
         activo={activo}
         cargos={cargos}
+        provincias={provincias}
+        localidades={localidades}
+        provinciaId={provinciaId}
+        localidadId={localidadId}
         setNombre={setNombre}
         setCargoId={setCargoId}
         setActivo={setActivo}
+        setProvinciaId={setProvinciaId}
+        setLocalidadId={setLocalidadId}
+        cargarLocalidades={cargarLocalidades}
         onGuardar={guardarDocente}
         onCancelar={limpiarFormulario}
       />
@@ -131,6 +240,9 @@ function Docentes() {
       <TablaDocentes
         docentes={docentes}
         cargos={cargos}
+        localidades={localidades}
+        provincias={provincias}
+        mostrarInactivos={mostrarInactivos}
         onEditar={editarDocente}
       />
     </div>
